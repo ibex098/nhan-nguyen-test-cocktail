@@ -1,24 +1,48 @@
-import logo from './logo.svg';
+import { useEffect, useState } from "react";
 import './App.css';
+import CocktailFilterForm from "./Components/CocktailFilterForm";
+import ListCocktail from "./Components/ListCocktail";
+import Loading from "./Components/Loading";
+
 
 function App() {
+  const [cocktailList, setCocktailList] = useState();
+  const [filters, setFilters] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchCocktailList() {
+      try {
+        const reqUrl = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${filters}`;
+        const res = await fetch(reqUrl).then();
+        const resJSON = await res.json();
+        const { drinks } = resJSON;
+        console.log({ drinks });
+        setCocktailList(drinks)
+        setLoading(false)
+      } catch (err) {
+        console.log({ err });
+      }
+    }
+    fetchCocktailList();
+  }, [filters])
+
+  //Filter
+  function handleFilterChange(newFilter) {
+    // console.log({ newFilter });
+    setLoading(true)
+    setFilters(newFilter)
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <CocktailFilterForm onSubmit={handleFilterChange} />
+      {loading ?
+        <Loading /> :
+        <ListCocktail cocktails={cocktailList} />
+      }
+    </>
   );
 }
 

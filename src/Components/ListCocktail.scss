@@ -1,0 +1,39 @@
+.listCocktail {
+  .card {
+    position: relative;
+    cursor: pointer;
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+
+      z-index: 2;
+      opacity: 0;
+      transition: all ease-in-out 0.3s;
+      background: rgba(25, 25, 24, 0.3);
+    }
+    &:hover {
+      &::before {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 1;
+      }
+    }
+    ul {
+      list-style: inside;
+      padding: 0;
+      li {
+        padding-top: 10px;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
